@@ -1,0 +1,60 @@
+{
+  "routerMap": [
+    {
+      "name": "LoginView",
+      "pageSourceFile": "src/main/ets/RegisteredBuilder/PageRegistered.ets",
+      "buildFunction": "LoginViewBuilder",
+      "data": {
+        "description": "跳转登陆页面"
+      }
+    },
+    {
+      "name": "RegisterView",
+      "pageSourceFile": "src/main/ets/RegisteredBuilder/PageRegistered.ets",
+      "buildFunction": "RegisterViewBuilder",
+      "data": {
+        "description": "跳转注册页面"
+      }
+    },
+    {
+      "name": "UserInfoView",
+      "pageSourceFile": "src/main/ets/RegisteredBuilder/PageRegistered.ets",
+      "buildFunction": "UserInfoViewBuilder",
+      "data": {
+        "description": "个人信息页面"
+      }
+    },
+    {
+      "name": "ChangeInfoView",
+      "pageSourceFile": "src/main/ets/RegisteredBuilder/PageRegistered.ets",
+      "buildFunction": "ChangeInfoViewBuilder",
+      "data": {
+        "description": "修改个人信息页面"
+      }
+    },
+    {
+      "name": "ChangePassWordView",
+      "pageSourceFile": "src/main/ets/RegisteredBuilder/PageRegistered.ets",
+      "buildFunction": "ChangePassWordViewBuilder",
+      "data": {
+        "description": "修改密码页面"
+      }
+    },
+    {
+      "name": "InstallView",
+      "pageSourceFile": "src/main/ets/RegisteredBuilder/PageRegistered.ets",
+      "buildFunction": "InstallViewBuilder",
+      "data": {
+        "description": "设置页面"
+      }
+    },
+    {
+      "name": "AIView",
+      "pageSourceFile": "src/main/ets/RegisteredBuilder/PageRegistered.ets",
+      "buildFunction": "AIViewBuilder",
+      "data": {
+        "description": "AI对话页面"
+      }
+    }
+  ]
+}

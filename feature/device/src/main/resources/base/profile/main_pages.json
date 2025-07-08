@@ -1,0 +1,12 @@
+{
+  "src": [
+    "pages/DeviceView",
+    "utils/MQTTView",
+    "deviceview/LEDView",
+    "deviceview/DHTView",
+    "pages/DeviceLinkInfoView",
+    "deviceview/BHView",
+    "deviceview/DC_MotorView",
+    "deviceview/BuzzerView"
+  ]
+}

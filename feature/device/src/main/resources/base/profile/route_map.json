@@ -1,0 +1,68 @@
+{
+  "routerMap": [
+    {
+      "name": "DHTInfoView",
+      "pageSourceFile": "src/main/ets/PageRegistered/PageRegistered.ets",
+      "buildFunction": "dhtInfoView",
+      "data": {
+        "description": "跳转温湿度页面"
+      }
+    },
+    {
+      "name": "MQTTInfoView",
+      "pageSourceFile": "src/main/ets/PageRegistered/PageRegistered.ets",
+      "buildFunction": "mqttInfoView",
+      "data": {
+        "description": "跳转MQTT配置页面"
+      }
+    },
+    {
+      "name": "LEDInfoView",
+      "pageSourceFile": "src/main/ets/PageRegistered/PageRegistered.ets",
+      "buildFunction": "ledInfoView",
+      "data": {
+        "description": "跳转LED"
+      }
+    },
+    {
+      "name": "BHView",
+      "pageSourceFile": "src/main/ets/PageRegistered/PageRegistered.ets",
+      "buildFunction": "BHViewViewBuilder",
+      "data": {
+        "description": "跳转光照传感器"
+      }
+    },
+    {
+      "name": "BuzzerView",
+      "pageSourceFile": "src/main/ets/PageRegistered/PageRegistered.ets",
+      "buildFunction": "BuzzerViewBuilder",
+      "data": {
+        "description": "跳转蜂鸣器"
+      }
+    },
+    {
+      "name": "DC_MotorView",
+      "pageSourceFile": "src/main/ets/PageRegistered/PageRegistered.ets",
+      "buildFunction": "DC_MotorViewBuilder",
+      "data": {
+        "description": "跳转直流电机"
+      }
+    },
+    {
+      "name": "DeviceLinkInfoView",
+      "pageSourceFile": "src/main/ets/PageRegistered/PageRegistered.ets",
+      "buildFunction": "DeviceLinkInfoViewBuilder",
+      "data": {
+        "description": "设备连接信息页面"
+      }
+    },
+    {
+      "name": "SearchView",
+      "pageSourceFile": "src/main/ets/PageRegistered/PageRegistered.ets",
+      "buildFunction": "SearchViewBuilder",
+      "data": {
+        "description": "搜索页面"
+      }
+    }
+  ]
+}

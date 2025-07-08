@@ -1,0 +1,12 @@
+{
+  "src": [
+    "pages/MineView",
+    "views/LoginView",
+    "views/RegisterView",
+    "views/UserInfoView",
+    "views/ChangeInfoView",
+    "views/ChangePassWordView",
+    "views/InstallView",
+    "views/AIView"
+  ]
+}

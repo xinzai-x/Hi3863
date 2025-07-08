@@ -1,0 +1,84 @@
+{
+  "app": {
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "storeFile": "C:/Users/xinzai/Desktop/华为开发key/.p12",
+          "storePassword": "0000001BD6C9E5F11B6DBF4B19A74558CCAB8361458500AE8D8051DAEFB01C6123C6653EF9D92A27290E6D",
+          "keyAlias": "StarSea",
+          "keyPassword": "0000001BE15BB0DF461F90BA8403A2C648F13FA2FC8E1D4EFECE7BBD87B74481A63804D21F8FA9D4180469",
+          "signAlg": "SHA256withECDSA",
+          "profile": "C:/Users/xinzai/Desktop/华为开发key/StarSea.p7b",
+          "certpath": "C:/Users/xinzai/Desktop/华为开发key/StartSea.cer"
+        }
+      }
+    ],
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+        "targetSdkVersion": "5.1.1(19)",
+        "compatibleSdkVersion": "5.1.1(19)",
+        "runtimeOS": "HarmonyOS",
+        "buildOption": {
+          "strictMode": {
+            "caseSensitiveCheck": true,
+            "useNormalizedOHMUrl": true
+          }
+        }
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug",
+      },
+      {
+        "name": "release"
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "phone",
+      "srcPath": "./product/phone",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "basic",
+      "srcPath": "./common/basic",
+    },
+    {
+      "name": "device",
+      "srcPath": "./feature/device",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "mine",
+      "srcPath": "./feature/mine",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    }
+  ]
+}

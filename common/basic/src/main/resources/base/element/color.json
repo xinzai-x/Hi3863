@@ -1,0 +1,84 @@
+{
+  "color": [
+    {
+      "name": "black",
+      "value": "#191919"
+    },
+    {
+      "name": "white",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "text",
+      "value": "#434343"
+    },
+    {
+      "name": "gray",
+      "value": "#A6A3AD"
+    },
+    {
+      "name": "red",
+      "value": "#FF2737"
+    },
+    {
+      "name": "linear_begin",
+      "value": "#FD3F8F"
+    },
+    {
+      "name": "linear_end",
+      "value": "#FF773C"
+    },
+    {
+      "name": "yellow",
+      "value": "#F2E7DC"
+    },
+    {
+      "name": "under",
+      "value": "#F5F4F9"
+    },
+    {
+      "name": "border",
+      "value": "#e4e4e4"
+    },
+    {
+      "name": "common_gray_01",
+      "value": "#979797"
+    },
+    {
+      "name": "common_gray_02",
+      "value": "#848484"
+    },
+    {
+      "name": "common_gray_03",
+      "value": "#666666"
+    },
+    {
+      "name": "common_gray_bg",
+      "value": "#f3f4f5"
+    },
+    {
+      "name": "common_gray_border",
+      "value": "#e8e7ee"
+    },
+    {
+      "name": "common_main_color",
+      "value": "#FA6D1D"
+    },
+    {
+      "name": "common_green",
+      "value": "#41B883"
+    },
+    {
+      "name": "common_blue",
+      "value": "#3266EE"
+    },
+    {
+      "name": "common_blue_bg",
+      "value": "#EDF2FF"
+    },
+    {
+      "name": "home_gray",
+      "value": "#EDECF2"
+    }
+  ]
+}
