@@ -1,0 +1,23 @@
+config SAMPLE_SUPPORT_KERNEL_01_TASK
+    bool
+    prompt "Support KERNEL_01_TASK Sample."
+    default n
+    depends on ENABLE_STARSEA_SAMPLE
+    help
+        This option means support KERNEL_01_TASK Sample.
+
+config SAMPLE_SUPPORT_MYSTARSEA
+    bool
+    prompt "Support MYSTARSEA Sample."
+    default n
+    depends on ENABLE_STARSEA_SAMPLE
+    help
+        This option means support MYSTARSEA Sample.
+
+config SAMPLE_SUPPORT_SLE_CLICENT
+    bool
+    prompt "Support SLE_CLICENT Sample."
+    default n
+    depends on ENABLE_STARSEA_SAMPLE
+    help
+        This option means support SLE_CLICENT Sample.

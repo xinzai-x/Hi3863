@@ -1,0 +1,26 @@
+set(SOURCES_LIST
+    ${CMAKE_CURRENT_SOURCE_DIR}/sht20/hal_bsp_sht20.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/rgb_led/hal_bsp_aw2013.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/wifi/wifi_connect.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/mqtt/mqtt_connect.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/oled1306/hal_bsp_ssd1306.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/nfc/hal_bsp_nfc.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/ap3216/hal_bsp_ap3216.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/sle_server_adv/sle_server_adv.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/sle_server_adv/sle_server.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/starsea_node.c
+)
+
+set(HEADER_LIST 
+    ${CMAKE_CURRENT_SOURCE_DIR}/sht20
+    ${CMAKE_CURRENT_SOURCE_DIR}/rgb_led
+    ${CMAKE_CURRENT_SOURCE_DIR}/wifi
+    ${CMAKE_CURRENT_SOURCE_DIR}/mqtt
+    ${CMAKE_CURRENT_SOURCE_DIR}/oled1306
+    ${CMAKE_CURRENT_SOURCE_DIR}/ap3216
+    ${CMAKE_CURRENT_SOURCE_DIR}/nfc
+    ${CMAKE_CURRENT_SOURCE_DIR}/sle_server_adv
+)
+
+set(SOURCES "${SOURCES}" ${SOURCES_LIST} PARENT_SCOPE)
+set(PUBLIC_HEADER "${PUBLIC_HEADER}" ${HEADER_LIST} PARENT_SCOPE)

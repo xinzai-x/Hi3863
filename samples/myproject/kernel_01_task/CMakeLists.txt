@@ -1,0 +1,12 @@
+set(SOURCES_LIST
+    ${CMAKE_CURRENT_SOURCE_DIR}/hal_bsp_sc12b/hal_bsp_sc12b.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/hal_bsp_oled/bsp_st7789_4line.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/sle_client.c
+)
+set(HEADER_LIST 
+    ${CMAKE_CURRENT_SOURCE_DIR}/hal_bsp_sc12b
+    ${CMAKE_CURRENT_SOURCE_DIR}/hal_bsp_oled
+)
+
+set(SOURCES "${SOURCES}" ${SOURCES_LIST} PARENT_SCOPE)
+set(PUBLIC_HEADER "${PUBLIC_HEADER}" ${HEADER_LIST} PARENT_SCOPE)

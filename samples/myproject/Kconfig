@@ -1,0 +1,56 @@
+config SAMPLE_SUPPORT_KERNEL_01_TASK
+    bool
+    prompt "Support KERNEL_01_TASK Sample."
+    default n
+    depends on ENABLE_MYPROJECT_SAMPLE
+    help
+        This option means support KERNEL_01_TASK Sample.
+
+config SAMPLE_SUPPORT_BASE_02_UART
+    bool
+    prompt "Support BASE_02_UART Sample."
+    default n
+    depends on ENABLE_MYPROJECT_SAMPLE
+    help
+        This option means support BASE_02_UART Sample.
+
+config SAMPLE_SUPPORT_BASE_01_LEDBLINK
+    bool
+    prompt "Support BASE_01_LEDBLINK Sample."
+    default n
+    depends on ENABLE_MYPROJECT_SAMPLE
+    help
+        This option means support BASE_01_LEDBLINK Sample.
+
+config SAMPLE_SUPPORT_BASE_04_RGB
+    bool
+    prompt "Support BASE_04_RGB Sample."
+    default n
+    depends on ENABLE_MYPROJECT_SAMPLE
+    help
+        This option means support BASE_04_RGB Sample.
+
+config SAMPLE_SUPPORT_WIFI_01_STA
+    bool
+    prompt "Support WIFI_01_STA Sample."
+    default n
+    depends on ENABLE_MYPROJECT_SAMPLE
+    help
+        This option means support WIFI_01_STA Sample.
+
+config SAMPLE_SUPPORT_WIFI_05_MQTT
+    bool
+    prompt "Support WIFI_05_MQTT Sample."
+    default n
+    depends on ENABLE_MYPROJECT_SAMPLE
+    help
+        This option means support WIFI_05_MQTT Sample.
+
+config SAMPLE_SUPPORT_TEST
+    bool
+    prompt "Support TEST Sample."
+    default n
+    depends on ENABLE_MYPROJECT_SAMPLE
+    help
+        This option means support TEST Sample.
+
