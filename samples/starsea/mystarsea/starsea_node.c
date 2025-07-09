@@ -20,12 +20,13 @@
 #include "sle_server_adv/sle_server.h"
 #include "app_init.h"
 
-osMutexId_t Mutex_ID;   // 定义互斥锁 ID
-osThreadId_t mqtt_ID;   // mqtt订阅数据任务
-osThreadId_t sht20_ID;  // sht20任务的id
-osThreadId_t oled_ID;   // oled任务的id
-osThreadId_t nfc_ID;    // nfc任务的id
-osThreadId_t ap3216_ID; // ap3216任务的id
+osMutexId_t Mutex_ID;             // 定义互斥锁 ID
+osThreadId_t mqtt_ID;             // mqtt订阅数据任务
+osThreadId_t sht20_ID;            // sht20任务的id
+osThreadId_t oled_ID;             // oled任务的id
+osThreadId_t nfc_ID;              // nfc任务的id
+osThreadId_t ap3216_ID;           // ap3216任务的id
+osThreadId_t controlActuators_ID; // ap3216任务的id
 osMutexId_t i2c_mutex = NULL;
 typedef struct {
     float temperature; // 温度
@@ -46,6 +47,15 @@ bool lock_flag = false;                           // nfc状态变量
 uint8_t *ndefBuff;                                // nfc接收数据变量
 unsigned int g_msg_rev_size = sizeof(msg_data_t); // 消息接收大小
 unsigned long g_msg_queue = 0;                    // 消息队列句柄
+bool mqtt_LED = false;
+bool temp_lx_LED = false;
+bool mqtt_DC = false;
+bool temp_lx_DC = false;
+bool nfc_DC = false;
+extern bool sle_DC;
+bool mqtt_Buzzer = false;
+bool temp_lx_Buzzer = false;
+extern bool sle_Buzzer;
 
 // mqtt发送数据
 int mqtt_publish(const char *topic, char *g_msg)
@@ -91,9 +101,9 @@ void handle_message(const char *topic, const char *msg)
             AW2013_Control_RGB(RGB_OFF, RGB_OFF, RGB_OFF);
             printf("所有RGB灯已关闭\r\n");
         } else if (strcmp(led_value, "on") == 0) {
-            uapi_gpio_set_val(GPIO_13, GPIO_LEVEL_LOW); // 打开LED
+            mqtt_LED = true;
         } else if (strcmp(led_value, "off") == 0) {
-            uapi_gpio_set_val(GPIO_13, GPIO_LEVEL_HIGH); // 关闭LED
+            mqtt_LED = false;
         }
     }
 
@@ -102,10 +112,10 @@ void handle_message(const char *topic, const char *msg)
     if (buzzer_item != NULL && cJSON_IsString(buzzer_item)) {
         const char *buzzer_value = buzzer_item->valuestring;
         if (strcmp(buzzer_value, "on") == 0) {
-            uapi_gpio_set_val(GPIO_10, GPIO_LEVEL_HIGH); // 打开蜂鸣器
+            mqtt_Buzzer = true;
             printf("蜂鸣器已开启\r\n");
         } else if (strcmp(buzzer_value, "off") == 0) {
-            uapi_gpio_set_val(GPIO_10, GPIO_LEVEL_LOW); // 关闭蜂鸣器
+            mqtt_Buzzer = false;
             printf("蜂鸣器已关闭\r\n");
         }
     }
@@ -115,13 +125,11 @@ void handle_message(const char *topic, const char *msg)
         const char *DC_value = DC_item->valuestring;
         if (strcmp(DC_value, "on") == 0) {
             // 打开电机
-            uapi_gpio_set_val(GPIO_08, GPIO_LEVEL_LOW);
-            uapi_gpio_set_val(GPIO_09, GPIO_LEVEL_HIGH);
+            mqtt_DC = true;
             printf("直流电机已开启\r\n");
         } else if (strcmp(DC_value, "off") == 0) {
             // 关闭电机
-            uapi_gpio_set_val(GPIO_08, GPIO_LEVEL_LOW);
-            uapi_gpio_set_val(GPIO_09, GPIO_LEVEL_LOW);
+            mqtt_DC = false;
             printf("直流电机已关闭\r\n");
         }
     }
@@ -159,12 +167,7 @@ void sht20_task(void)
     temp_humidity_data_t th_data;
     msg_data_t msg_data = {0};
     SHT20_Init(); // SHT20初始化
-    // 设置LED灯输出模式
-    uapi_gpio_set_dir(GPIO_13, GPIO_DIRECTION_OUTPUT);
-    uapi_gpio_set_dir(GPIO_10, GPIO_DIRECTION_OUTPUT);
-    uapi_gpio_set_val(GPIO_10, GPIO_LEVEL_LOW);  // 默认关闭蜂鸣器
-    uapi_gpio_set_val(GPIO_13, GPIO_LEVEL_HIGH); // 默认关闭LED
-    printf("温湿度、led初始化完成\r\n");
+    printf("温湿度初始化完成\r\n");
 
     while (1) {
         osMutexAcquire(i2c_mutex, osWaitForever); // 加锁
@@ -189,18 +192,16 @@ void sht20_task(void)
         // 判断温湿度以及光照
         if ((temperature >= 27.0f && humidity >= 70.0f) || als >= 1000) {
             printf("打开LED\r\n");
-            uapi_gpio_set_val(GPIO_10, GPIO_LEVEL_HIGH); // 打开蜂鸣器
-            uapi_gpio_set_val(GPIO_13, GPIO_LEVEL_LOW);  // 打开LED
+            temp_lx_Buzzer = true;
+            temp_lx_LED = true;
             // 打开电机
-            uapi_gpio_set_val(GPIO_08, GPIO_LEVEL_LOW);
-            uapi_gpio_set_val(GPIO_09, GPIO_LEVEL_HIGH);
+            temp_lx_DC = true;
         } else {
             printf("关闭LED\r\n");
-            uapi_gpio_set_val(GPIO_10, GPIO_LEVEL_LOW);  // 关闭蜂鸣器
-            uapi_gpio_set_val(GPIO_13, GPIO_LEVEL_HIGH); // 关闭LED
+            temp_lx_Buzzer = false;
+            temp_lx_LED = false;
             // 关闭电机
-            uapi_gpio_set_val(GPIO_08, GPIO_LEVEL_LOW);
-            uapi_gpio_set_val(GPIO_09, GPIO_LEVEL_LOW);
+            temp_lx_DC = false;
         }
         printf("%s\r\n", buf);
         osDelay(100);
@@ -263,12 +264,10 @@ void nfc_task(void)
                 if (ndefBuff[9] == 0x6f && ndefBuff[10] == 0x6e && ps >= 80) {
                     lock_flag = true;
                     // 打开电机
-                    uapi_gpio_set_val(GPIO_08, GPIO_LEVEL_LOW);
-                    uapi_gpio_set_val(GPIO_09, GPIO_LEVEL_HIGH);
+                    nfc_DC = true;
                     osDelay(DELAY_TIME_MS);
                     // 关闭电机
-                    uapi_gpio_set_val(GPIO_08, GPIO_LEVEL_LOW);
-                    uapi_gpio_set_val(GPIO_09, GPIO_LEVEL_LOW);
+                    nfc_DC = false;
                     NT3HEraseAllTag(); // 擦除NFC数据
                 } else {
                     if (ndefBuff[9] == 0x6f && ndefBuff[10] == 0x6e) {
@@ -319,6 +318,39 @@ static void *sle_server_task(const char *arg)
     return NULL;
 }
 
+// 蜂鸣器、电机、LED统一开关
+void controlActuators(void)
+{
+    // 设置LED灯输出模式
+    uapi_gpio_set_dir(GPIO_13, GPIO_DIRECTION_OUTPUT);
+    uapi_gpio_set_dir(GPIO_10, GPIO_DIRECTION_OUTPUT);
+    uapi_gpio_set_val(GPIO_10, GPIO_LEVEL_LOW);  // 默认关闭蜂鸣器
+    uapi_gpio_set_val(GPIO_13, GPIO_LEVEL_HIGH); // 默认关闭LED
+    printf("蜂鸣器、LED灯初始化完成\r\n");
+    while (1) {
+        if (mqtt_LED || temp_lx_LED) {
+            uapi_gpio_set_val(GPIO_13, GPIO_LEVEL_LOW);
+        } else {
+            uapi_gpio_set_val(GPIO_13, GPIO_LEVEL_HIGH); // 关闭LED
+        }
+        if (nfc_DC || temp_lx_DC || mqtt_DC || sle_DC) {
+            // 打开电机
+            uapi_gpio_set_val(GPIO_08, GPIO_LEVEL_LOW);
+            uapi_gpio_set_val(GPIO_09, GPIO_LEVEL_HIGH);
+        } else {
+            // 关闭电机
+            uapi_gpio_set_val(GPIO_08, GPIO_LEVEL_LOW);
+            uapi_gpio_set_val(GPIO_09, GPIO_LEVEL_LOW);
+        }
+        if (sle_Buzzer || mqtt_Buzzer || temp_lx_Buzzer) {
+            uapi_gpio_set_val(GPIO_10, GPIO_LEVEL_HIGH); // 打开蜂鸣器
+        } else {
+            uapi_gpio_set_val(GPIO_10, GPIO_LEVEL_LOW); // 关闭蜂鸣器
+        }
+        osDelay(100);
+    }
+}
+
 // 入口函数
 void starsea_node(void)
 {
@@ -367,6 +399,14 @@ void starsea_node(void)
     nfc_ID = osThreadNew((osThreadFunc_t)nfc_task, NULL, &attr);
     if (nfc_ID != NULL) {
         printf("nfc线程创建成功\r\n");
+    }
+
+    // led、电机、蜂鸣器线程
+    attr.name = "controlactuators";
+    attr.priority = osPriorityNormal; // 中等优先级
+    controlActuators_ID = osThreadNew((osThreadFunc_t)controlActuators, NULL, &attr);
+    if (controlActuators_ID != NULL) {
+        printf("led、蜂鸣器、电机线程创建成功\r\n");
     }
 
     // 光照和红外线程

@@ -50,6 +50,9 @@ static uint16_t g_property_handle = 0; // 属性句柄
 /* 基础UUID值 */
 static uint8_t g_sle_base[] = {0x73, 0x6C, 0x65, 0x5F, 0x74, 0x65, 0x73, 0x74}; // "sle_test"的ASCII码
 
+bool sle_DC = false;
+bool sle_Buzzer = false;
+
 /* 将16位数据编码为小端格式的2字节 */
 static void encode2byte_little(uint8_t *ptr, uint16_t data)
 {
@@ -184,12 +187,14 @@ static void ssaps_write_request_cbk(uint8_t server_id,
         // 4. 根据命令内容执行相应操作
         if (strcmp(received_command, "关机") == 0) {
             printf("执行打开电机...\r\n");
-            uapi_gpio_set_val(GPIO_08, GPIO_LEVEL_LOW);
-            uapi_gpio_set_val(GPIO_09, GPIO_LEVEL_HIGH);
+            sle_DC = true;
+            // uapi_gpio_set_val(GPIO_08, GPIO_LEVEL_LOW);
+            // uapi_gpio_set_val(GPIO_09, GPIO_LEVEL_HIGH);
         } else if (strcmp(received_command, "主菜单") == 0) {
             printf("执行关闭电机...\r\n");
-            uapi_gpio_set_val(GPIO_08, GPIO_LEVEL_LOW);
-            uapi_gpio_set_val(GPIO_09, GPIO_LEVEL_LOW);
+            sle_DC = false;
+            // uapi_gpio_set_val(GPIO_08, GPIO_LEVEL_LOW);
+            // uapi_gpio_set_val(GPIO_09, GPIO_LEVEL_LOW);
         } else if (strcmp(received_command, "前") == 0) {
             printf("执行打开绿灯...\r\n");
             AW2013_Control_Green(RGB_ON);
@@ -213,10 +218,10 @@ static void ssaps_write_request_cbk(uint8_t server_id,
             AW2013_Control_Blue(RGB_OFF);
         } else if (strcmp(received_command, "设置") == 0) {
             printf("执行打开蜂鸣器...\r\n");
-            uapi_gpio_set_val(GPIO_10, GPIO_LEVEL_HIGH); // 打开蜂鸣器
+            sle_Buzzer = true;
         } else if (strcmp(received_command, "返回") == 0) {
             printf("执行关闭蜂鸣器...\r\n");
-            uapi_gpio_set_val(GPIO_10, GPIO_LEVEL_LOW); // 关闭蜂鸣器
+            sle_Buzzer = false;
         }
         // 其他命令处理...
         else {
@@ -363,7 +368,11 @@ errcode_t sle_server_send_report_by_handle(msg_data_t msg_data)
 }
 
 /* 连接状态改变回调函数 */
-static void sle_connect_state_changed_cbk(uint16_t conn_id,const sle_addr_t *addr, sle_acb_state_t conn_state, sle_pair_state_t pair_state,sle_disc_reason_t disc_reason)
+static void sle_connect_state_changed_cbk(uint16_t conn_id,
+                                          const sle_addr_t *addr,
+                                          sle_acb_state_t conn_state,
+                                          sle_pair_state_t pair_state,
+                                          sle_disc_reason_t disc_reason)
 {
     printf("[%s] conn_id:0x%02x, conn_state:0x%x, pair_state:0x%x, disc_reason:0x%x\r\n", __FUNCTION__, conn_id,
            conn_state, pair_state, disc_reason);
